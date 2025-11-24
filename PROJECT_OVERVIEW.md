@@ -13,8 +13,8 @@ This is a **Next.js (Frontend) + AWS Serverless (Backend)** monorepo.
 * **Development Process:** `docs/core/PROCESS.md` (The Iteration Lifecycle)
 
 ### 2. Domain Specifics (Context on Demand)
-* **Frontend Agent:** Read `docs/frontend/CODING_STANDARDS.md`
-* **Backend Agent:** Read `docs/backend/CODING_STANDARDS.md`
+* **Frontend Agent:** Read `docs/frontend/CODING_STANDARDS_FRONTEND.md`
+* **Backend Agent:** Read `docs/backend/CODING_STANDARDS_BACKEND.md`
 * **Shared Contract:** Read `shared/README.md` (Types/Constants)
 
 ### 3. Current State (Dynamic Context)
