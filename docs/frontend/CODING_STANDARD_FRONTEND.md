@@ -1,24 +1,25 @@
 # Frontend Coding Standards
 
-**Scope:** Next.js 16+, React 19, Tailwind, Zustand, TanStack Query.
+**Scope:** Next.js 16+, React 19, Tailwind CSS, Zustand, TanStack Query.
 **Enforcement:** TypeScript Strict Mode + ESLint.
 
 ## 1. Directory Structure & Colocation
-We follow a strict **colocation strategy**. Things that change together stay together.
+We follow a strict **Feature-based Colocation** strategy. Things that change together stay together. Do not group by file type.
 
 ### Component Structure
-Do not group by file type (e.g., do NOT put all CSS in one folder). Group by Feature/Component.
-
+Every component gets its own directory.
 ```text
 /components
 └── /Button
     ├── Button.tsx          # Source
-    ├── Button.test.tsx     # Unit Test
+    ├── Button.test.tsx     # Unit Test (Jest + RTL)
     ├── Button.stories.tsx  # Storybook Documentation
     └── index.ts            # Public Interface (Barrel export)
 ````
 
-### Page Structure (Next.js App Router)
+### App Router Structure
+
+Pages are grouped by route. Shared components specific to a route stay with that route.
 
 ```text
 /app
@@ -42,15 +43,19 @@ Do not group by file type (e.g., do NOT put all CSS in one folder). Group by Fea
 
 ### Props Interface
 
-  * Always define a specific interface. Do not use `any`.
-  * Extend HTML attributes when wrapping native elements.
+  * Always define a specific interface named `[ComponentName]Props`.
+  * **No `any`:** If the type is truly unknown, use `unknown` and narrow it.
+  * Extend native HTML attributes when wrapping elements.
 
-<!-- end list -->
 
 ```tsx
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
   isLoading?: boolean;
+}
+
+export function Button({ variant = 'primary', isLoading, ...props }: ButtonProps) {
+  // ...
 }
 ```
 
@@ -59,7 +64,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   * **Default to Server Components.**
   * Add `'use client'` at the top **only** when you need:
       * `useState`, `useEffect`, or custom hooks.
-      * Event listeners (`onClick`).
+      * Event listeners (`onClick`, `onChange`).
       * Browser-only APIs (`window`, `localStorage`).
 
 -----
@@ -69,10 +74,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 ### Server State (Data Fetching)
 
   * **Tool:** **TanStack Query** (React Query).
-  * **Rule:** Never store API data in `useState` or `Zustand` unless you are transforming it significantly.
+  * **Rule:** Never store API data in `useState` or `Zustand` unless you are transforming it significantly for UI interactions.
   * **Pattern:** Create custom hooks for every query.
-
-<!-- end list -->
 
 ```tsx
 // hooks/useUser.ts
@@ -88,17 +91,21 @@ export function useUser(id: string) {
 ### Global Client State
 
   * **Tool:** **Zustand**.
-  * **Usage:** UI state (Sidebar open/close, Theme, Modals).
+  * **Usage:** Pure UI state (Sidebar open/close, Theme, Modals, Complex Form Wizards).
   * **Pattern:** Create small, specific stores. Avoid one giant "AppStore".
 
-<!-- end list -->
 
 ```tsx
 // stores/uiStore.ts
-interface UIState {
+interface UiState {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
 }
+
+export const useUiStore = create<UiState>((set) => ({
+  isSidebarOpen: false,
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+}));
 ```
 
 -----
@@ -106,23 +113,27 @@ interface UIState {
 ## 4. Styling (Tailwind CSS)
 
   * **Utility First:** Use Tailwind utility classes for layout and spacing.
-  * **No `@apply`:** Avoid using `@apply` in CSS files unless creating a reusable animation.
-  * **Class Sorting:** Use the prettier plugin for class sorting if available, or order by: `Layout -> Box Model -> Typography -> Visuals`.
-  * **Conditional Classes:** Use `clsx` or `cn` utility (if using shadcn/ui pattern).
+  * **No `@apply`:** Avoid using `@apply` in CSS files. Keep styles in the JSX to maintain locality.
+  * **Conditional Classes:** Use a utility like `clsx` or `cn` (shadcn/ui pattern) for dynamic class names.
+
+```tsx
+// ✅ Good
+<div className={cn("bg-blue-500 p-4", isError && "bg-red-500")}>
+```
 
 -----
 
 ## 5. Testing Guidelines
 
-### Unit Tests (Jest + RTL)
+### Unit Tests (Jest + React Testing Library)
 
   * **Focus:** Test behavior, not implementation details.
-  * **Selectors:** Use `screen.getByRole` (accessibility first) or `data-testid`.
+  * **Selectors:** Use `screen.getByRole` (accessibility first) or `data-testid` if necessary.
   * **Mocking:** Mock strictly at the boundaries (API calls, heavy sub-components).
 
 ### Storybook
 
-  * **Mandatory:** Every UI component must have a Story.
+  * **Mandatory:** Every UI component must have a `.stories.tsx` file.
   * **Variants:** Create stories for `Default`, `Loading`, `Error`, and `Empty` states.
 
 -----
@@ -136,5 +147,5 @@ interface UIState {
 | **Utilities** | camelCase | `formatDate.ts` |
 | **Constants** | UPPER\_SNAKE | `MAX_RETRY_COUNT` |
 | **Types/Interfaces**| PascalCase | `UserResponse` |
-
+| **Stores** | camelCase | `authStore.ts` |
 
