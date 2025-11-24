@@ -31,6 +31,7 @@ This is a **Next.js (Frontend) + AWS Serverless (Backend)** monorepo.
     * API Contracts → `shared/types`
     * Database Schema → `docs/backend/DATABASE_SCHEMA.md`
     * UI Design → `docs/frontend/DESIGN_SYSTEM.md`
+5. **Iteration Start:** All work MUST begin with `./scripts/start-iteration.sh "Feature Name"`. Manual folder creation is forbidden.
 
 ## 📂 Directory Structure
 ```text

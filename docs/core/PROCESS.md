@@ -28,6 +28,11 @@ Every unit of work must follow this strict cycle to maintain context and prevent
     * Write `docs/iterations/.../RETRO.md`.
     * Update `TODO.md` (Mark as Done).
 
+## Phase 4: Evolution (Orchestrator only)
+
+* If RETRO.md proposes a process change → Orchestrator updates docs/core/* and commits with 
+  message "RETRO: <iteration> – <change summary>"
+
 ---
 
 ## 📄 File Templates
