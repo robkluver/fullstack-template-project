@@ -128,16 +128,38 @@ Task("Find auth handlers") + Task("Find database models") + Task("Find API route
 
 ---
 
-## Token Budget Guidelines
+## Token Budget Guidelines (Soft Limits)
 
-| Operation | Target Budget |
-|-----------|---------------|
-| Single file edit | <10K tokens context |
-| Feature implementation | <50K tokens total |
-| Codebase exploration | Use sub-agents |
-| Full iteration | <100K tokens |
+These are **guidelines, not hard limits**. Complex tasks naturally require more context. The goal is efficiency, not artificial constraints.
 
-If approaching limits:
-1. Commit current progress
-2. Summarize state in WORK_LOG.md
-3. Start fresh context with summary
+| Operation | Target | Acceptable Range | Notes |
+|-----------|--------|------------------|-------|
+| Single file edit | ~10K | 5-20K | Simple edits need less |
+| Feature implementation | ~50K | 30-80K | Complex features may need more |
+| Codebase exploration | Use sub-agents | - | Offload to Haiku agents |
+| Full iteration | ~100K | 80-150K | Multi-file features need headroom |
+| Debugging complex issues | ~80K | 50-120K | May need extensive context |
+
+### When to Exceed Guidelines
+It's acceptable to use more context when:
+- Debugging requires reading multiple related files
+- Feature spans many interconnected components
+- Understanding legacy code with poor documentation
+- Complex refactoring with many dependencies
+
+### When Approaching High Usage
+1. **Don't panic** - finish the current logical unit of work
+2. Commit current progress (creates a checkpoint)
+3. Summarize state in WORK_LOG.md
+4. Consider: Can remaining work be done in a fresh context?
+
+### Context Reset Strategy
+If context is getting unwieldy:
+```markdown
+## Context Handoff Summary
+**Completed:** [What's done]
+**Current State:** [What's working/broken]
+**Next Steps:** [Specific remaining tasks]
+**Key Files:** [Files needed for next phase]
+```
+This summary enables a fresh context to continue efficiently.

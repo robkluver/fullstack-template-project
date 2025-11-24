@@ -34,13 +34,35 @@ Before trying anything else:
    **Current state:** [What's broken/working]
    ```
 
-### Step 2: Escalate Model
-If currently using:
+### Step 2: Expand Context (Targeted)
+Before escalating models, check if you're missing critical context:
+
+1. **Identify what's unknown:**
+   - Are there related files you haven't read?
+   - Is there documentation that might explain the expected behavior?
+   - Are there tests that demonstrate correct usage?
+
+2. **Targeted expansion (NOT blanket loading):**
+   ```
+   # Good: Read specific related files
+   Read the error handler that's being triggered
+   Read the test file to understand expected behavior
+
+   # Bad: Load everything
+   Read all files in src/
+   ```
+
+3. **Ask clarifying questions** if requirements are ambiguous
+
+**Skip to Step 3 if:** Context is already comprehensive or expansion didn't help.
+
+### Step 3: Escalate Model
+If context expansion didn't resolve the issue:
 - **Haiku** → Switch to **Sonnet**
 - **Sonnet** → Switch to **Opus**
-- **Opus** → Proceed to Step 3
+- **Opus** → Proceed to Step 4
 
-### Step 3: Fresh Analysis (Opus)
+### Step 4: Fresh Analysis (Opus)
 With Opus, perform structured analysis:
 
 1. **Re-read the original requirement** (PLAN.md, Gherkin spec)
@@ -54,7 +76,7 @@ With Opus, perform structured analysis:
 4. **Generate 3 alternative approaches**
 5. **Evaluate each before implementing**
 
-### Step 4: Seek Human Input
+### Step 5: Seek Human Input
 If Opus cannot resolve:
 1. Document findings in WORK_LOG.md
 2. Create a clear question for human review
