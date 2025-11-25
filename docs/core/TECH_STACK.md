@@ -82,7 +82,7 @@ This template supports three configurations:
 
 | Technology | Version | Notes |
 |------------|---------|-------|
-| **pnpm** | 9.x | Package manager (faster than yarn) |
+| **Yarn** | 1.22+ or 4.x | Package manager (workspaces enabled) |
 | **Turborepo** | 2.x | Monorepo build orchestration |
 | **TypeScript** | 5.9+ | Shared across packages |
 | **Zod** | 3.x | Shared schemas |
@@ -98,8 +98,7 @@ This template supports three configurations:
 │   ├── eslint-config/    # Shared ESLint config
 │   └── tsconfig/         # Shared TypeScript config
 ├── turbo.json
-├── pnpm-workspace.yaml
-└── package.json
+└── package.json          # Includes "workspaces" config
 ```
 
 ---
@@ -132,7 +131,7 @@ Node.js 20.x/22.x
 ├── Tailwind 4.x
 ├── ESLint 9.x (flat config)
 │   └── typescript-eslint 8.x
-└── pnpm 9.x
+└── Yarn (workspaces)
 ```
 
 **Compatibility Notes:**

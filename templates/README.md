@@ -2,16 +2,21 @@
 
 This directory contains starter templates for different project configurations.
 
-## Usage
+**Recommended:** Use the `create-project.js` script instead of manual setup:
 
-Copy the relevant files to set up your project:
+```bash
+node scripts/create-project.js --name "My App" --type fullstack
+```
+
+## Manual Setup
+
+If you prefer manual setup, copy the relevant files:
 
 ### Fullstack (Frontend + Backend)
 ```bash
 # Root
 cp templates/package.root.json package.json
 cp templates/turbo.json turbo.json
-cp templates/pnpm-workspace.yaml pnpm-workspace.yaml
 
 # Apps
 mkdir -p apps/web apps/api
@@ -27,7 +32,6 @@ cp templates/package.shared.json packages/shared/package.json
 ```bash
 cp templates/package.root.json package.json
 cp templates/turbo.json turbo.json
-cp templates/pnpm-workspace.yaml pnpm-workspace.yaml
 
 mkdir -p apps/web
 cp templates/package.web.json apps/web/package.json
@@ -40,7 +44,6 @@ cp templates/package.shared.json packages/shared/package.json
 ```bash
 cp templates/package.root.json package.json
 cp templates/turbo.json turbo.json
-cp templates/pnpm-workspace.yaml pnpm-workspace.yaml
 
 mkdir -p apps/api
 cp templates/package.api.json apps/api/package.json
@@ -53,16 +56,15 @@ cp templates/package.shared.json packages/shared/package.json
 
 | File | Purpose |
 |------|---------|
-| `package.root.json` | Root monorepo package.json |
+| `package.root.json` | Root monorepo package.json (includes workspaces) |
 | `package.web.json` | Next.js frontend app |
 | `package.api.json` | AWS Lambda backend |
 | `package.shared.json` | Shared types/schemas |
 | `turbo.json` | Turborepo task configuration |
-| `pnpm-workspace.yaml` | pnpm workspace definition |
 
 ## After Setup
 
-1. Install dependencies: `pnpm install`
-2. Run development: `pnpm dev`
-3. Run tests: `pnpm test`
-4. Build: `pnpm build`
+1. Install dependencies: `yarn install`
+2. Run development: `yarn dev`
+3. Run tests: `yarn test`
+4. Build: `yarn build`

@@ -6,9 +6,9 @@
  * Scaffolds a new project from templates based on project type.
  *
  * Usage:
- *   node scripts/create-project-from-template.js --name "My App" --type fullstack
- *   node scripts/create-project-from-template.js --name "API Service" --type backend --scope @mycompany
- *   node scripts/create-project-from-template.js --name "Marketing Site" --type frontend --output ./projects
+ *   node scripts/create-project.js --name "My App" --type fullstack
+ *   node scripts/create-project.js --name "API Service" --type backend --scope @mycompany
+ *   node scripts/create-project.js --name "Marketing Site" --type frontend --output ./projects
  *
  * Arguments:
  *   --name, -n      Project display name (required) - e.g., "My App"
@@ -17,7 +17,7 @@
  *   --scope, -s     Package scope for monorepo (default: @repo)
  *   --description   Project description (default: derived from name)
  *   --skip-git      Skip git initialization
- *   --skip-install  Skip pnpm install
+ *   --skip-install  Skip yarn install
  *   --dry-run       Show what would be created without writing files
  */
 
@@ -98,18 +98,18 @@ function parseArgs(args) {
 
 function showHelp() {
   console.log(`
-Project Provisioning Script
+Create Project From Template
 
-Creates a new project from templates based on project type.
+Scaffolds a new project from templates based on project type.
 
 USAGE:
-  node scripts/create-project-from-template.js --name "My TODO Web App" --type fullstack
-  node scripts/create-project-from-template.js --name "API Service" --type backend --scope @mycompany
-  node scripts/create-project-from-template.js --name "Marketing Site" --type frontend --output ./projects
+  node scripts/create-project.js --name "My App" --type fullstack
+  node scripts/create-project.js --name "API Service" --type backend --scope @mycompany
+  node scripts/create-project.js --name "Marketing Site" --type frontend --output ./projects
 
 ARGUMENTS:
   --name, -n      Project display name (required)
-                  Example: "My TODO Web App"
+                  Example: "My App"
 
   --type, -t      Project type (required)
                   Options: fullstack, frontend, backend
@@ -126,7 +126,7 @@ ARGUMENTS:
 
   --skip-git      Skip git repository initialization
 
-  --skip-install  Skip running pnpm install
+  --skip-install  Skip running yarn install
 
   --dry-run       Show what would be created without writing files
 
@@ -134,13 +134,13 @@ ARGUMENTS:
 
 EXAMPLES:
   # Create a fullstack project
-  node scripts/create-project-from-template.js -n "My TODO Web App" -t fullstack
+  node scripts/create-project.js -n "My App" -t fullstack
 
   # Create a backend-only API
-  node scripts/create-project-from-template.js -n "User Service API" -t backend -s @acme
+  node scripts/create-project.js -n "User Service API" -t backend -s @acme
 
   # Create frontend in specific directory
-  node scripts/create-project-from-template.js -n "Marketing Site" -t frontend -o ./apps
+  node scripts/create-project.js -n "Marketing Site" -t frontend -o ./apps
 `);
 }
 
@@ -304,12 +304,7 @@ function createRootFiles(outputDir, config, dryRun) {
   const turboConfig = readJsonTemplate(path.join(TEMPLATES_DIR, 'turbo.json'));
   writeJson(path.join(outputDir, 'turbo.json'), turboConfig, dryRun);
 
-  // pnpm-workspace.yaml
-  const workspaceContent = fs.readFileSync(
-    path.join(TEMPLATES_DIR, 'pnpm-workspace.yaml'),
-    'utf-8'
-  );
-  writeFile(path.join(outputDir, 'pnpm-workspace.yaml'), workspaceContent, dryRun);
+  // package.json workspaces (yarn uses package.json, not separate file)
 
   // .prettierrc (from root)
   const prettierrcPath = path.join(__dirname, '..', '.prettierrc');
@@ -326,7 +321,6 @@ function createRootFiles(outputDir, config, dryRun) {
   // .gitignore
   const gitignoreContent = `# Dependencies
 node_modules/
-.pnpm-store/
 
 # Build outputs
 dist/
@@ -362,7 +356,6 @@ Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 `;
@@ -377,16 +370,16 @@ ${config.description}
 
 \`\`\`bash
 # Install dependencies
-pnpm install
+yarn install
 
 # Run development servers
-pnpm dev
+yarn dev
 
 # Run tests
-pnpm test
+yarn test
 
 # Build for production
-pnpm build
+yarn build
 \`\`\`
 
 ## Project Structure
@@ -399,18 +392,17 @@ ${config.type !== 'backend' ? '│   ├── web/              # Next.js front
 │   ├── eslint-config/    # Shared ESLint configuration
 │   └── tsconfig/         # Shared TypeScript configuration
 ├── turbo.json
-├── pnpm-workspace.yaml
 └── package.json
 \`\`\`
 
 ## Available Scripts
 
-- \`pnpm dev\` - Start development servers
-- \`pnpm build\` - Build all packages
-- \`pnpm test\` - Run tests
-- \`pnpm lint\` - Lint code
-- \`pnpm format\` - Format code with Prettier
-- \`pnpm typecheck\` - Type check with TypeScript
+- \`yarn dev\` - Start development servers
+- \`yarn build\` - Build all packages
+- \`yarn test\` - Run tests
+- \`yarn lint\` - Lint code
+- \`yarn format\` - Format code with Prettier
+- \`yarn typecheck\` - Type check with TypeScript
 `;
   writeFile(path.join(outputDir, 'README.md'), readmeContent, dryRun);
 }
@@ -841,15 +833,15 @@ function installPackages(outputDir, dryRun) {
   console.log('\nInstalling dependencies...');
 
   if (dryRun) {
-    console.log('  [DRY-RUN] Would run: pnpm install');
+    console.log('  [DRY-RUN] Would run: yarn install');
     return;
   }
 
   try {
-    execSync('pnpm install', { cwd: outputDir, stdio: 'inherit' });
+    execSync('yarn install', { cwd: outputDir, stdio: 'inherit' });
     console.log('  Dependencies installed successfully');
   } catch (error) {
-    console.warn('  Warning: pnpm install failed. You may need to run it manually.');
+    console.warn('  Warning: yarn install failed. You may need to run it manually.');
   }
 }
 
@@ -936,9 +928,9 @@ function main() {
   console.log(`\nNext steps:`);
   console.log(`  cd ${slug}`);
   if (args.skipInstall) {
-    console.log(`  pnpm install`);
+    console.log(`  yarn install`);
   }
-  console.log(`  pnpm dev`);
+  console.log(`  yarn dev`);
   console.log('');
 }
 
