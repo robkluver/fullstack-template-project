@@ -564,10 +564,14 @@ export default [...reactConfig];
 
   // next.config.ts
   const nextConfigContent = `import type { NextConfig } from 'next';
+import path from 'node:path';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ['${config.scope}/shared'],
+  turbopack: {
+    root: path.join(__dirname, '../..'),
+  },
 };
 
 export default nextConfig;
@@ -620,7 +624,7 @@ export default function RootLayout({
   const jestConfigContent = `/** @type {import('jest').Config} */
 const config = {
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
@@ -634,10 +638,10 @@ module.exports = config;
 `;
   writeFile(path.join(webDir, 'jest.config.js'), jestConfigContent, dryRun);
 
-  // jest.setup.js
+  // jest.setup.ts
   const jestSetupContent = `import '@testing-library/jest-dom';
 `;
-  writeFile(path.join(webDir, 'jest.setup.js'), jestSetupContent, dryRun);
+  writeFile(path.join(webDir, 'jest.setup.ts'), jestSetupContent, dryRun);
 }
 
 function createApiApp(outputDir, config, dryRun) {
@@ -710,9 +714,9 @@ custom:
   writeFile(path.join(apiDir, 'serverless.yml'), serverlessContent, dryRun);
 
   // src/handlers/health.ts
-  const healthHandlerContent = `import type { APIGatewayProxyHandler } from 'aws-lambda';
+  const healthHandlerContent = `import type { APIGatewayProxyResult } from 'aws-lambda';
 
-export const handler: APIGatewayProxyHandler = async () => {
+export const handler = (): APIGatewayProxyResult => {
   return {
     statusCode: 200,
     headers: {
@@ -733,12 +737,12 @@ export const handler: APIGatewayProxyHandler = async () => {
 
   // src/handlers/auth/login.ts
   const loginHandlerContent = `import 'reflect-metadata';
-import type { APIGatewayProxyHandler } from 'aws-lambda';
+import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { LoginRequestSchema } from '${config.scope}/shared';
 
-export const handler: APIGatewayProxyHandler = async (event) => {
+export const handler = (event: APIGatewayProxyEvent): APIGatewayProxyResult => {
   try {
-    const body = JSON.parse(event.body || '{}');
+    const body: unknown = JSON.parse(event.body ?? '{}');
     const validated = LoginRequestSchema.parse(body);
 
     // TODO: Implement actual authentication
