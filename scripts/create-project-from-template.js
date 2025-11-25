@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * Project Provisioning Script
+ * Create Project From Template
  *
- * Creates a new project from templates based on project type.
+ * Scaffolds a new project from templates based on project type.
  *
  * Usage:
- *   node scripts/provision.js --name "My TODO Web App" --type fullstack
- *   node scripts/provision.js --name "API Service" --type backend --scope @mycompany
- *   node scripts/provision.js --name "Marketing Site" --type frontend --output ./projects
+ *   node scripts/create-project-from-template.js --name "My App" --type fullstack
+ *   node scripts/create-project-from-template.js --name "API Service" --type backend --scope @mycompany
+ *   node scripts/create-project-from-template.js --name "Marketing Site" --type frontend --output ./projects
  *
  * Arguments:
- *   --name, -n      Project display name (required) - e.g., "My TODO Web App"
+ *   --name, -n      Project display name (required) - e.g., "My App"
  *   --type, -t      Project type: fullstack, frontend, backend (required)
  *   --output, -o    Output directory (default: ./<slug>)
  *   --scope, -s     Package scope for monorepo (default: @repo)
@@ -103,9 +103,9 @@ Project Provisioning Script
 Creates a new project from templates based on project type.
 
 USAGE:
-  node scripts/provision.js --name "My TODO Web App" --type fullstack
-  node scripts/provision.js --name "API Service" --type backend --scope @mycompany
-  node scripts/provision.js --name "Marketing Site" --type frontend --output ./projects
+  node scripts/create-project-from-template.js --name "My TODO Web App" --type fullstack
+  node scripts/create-project-from-template.js --name "API Service" --type backend --scope @mycompany
+  node scripts/create-project-from-template.js --name "Marketing Site" --type frontend --output ./projects
 
 ARGUMENTS:
   --name, -n      Project display name (required)
@@ -134,13 +134,13 @@ ARGUMENTS:
 
 EXAMPLES:
   # Create a fullstack project
-  node scripts/provision.js -n "My TODO Web App" -t fullstack
+  node scripts/create-project-from-template.js -n "My TODO Web App" -t fullstack
 
   # Create a backend-only API
-  node scripts/provision.js -n "User Service API" -t backend -s @acme
+  node scripts/create-project-from-template.js -n "User Service API" -t backend -s @acme
 
   # Create frontend in specific directory
-  node scripts/provision.js -n "Marketing Site" -t frontend -o ./apps
+  node scripts/create-project-from-template.js -n "Marketing Site" -t frontend -o ./apps
 `);
 }
 
