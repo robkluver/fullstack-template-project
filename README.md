@@ -1,4 +1,4 @@
-# Nexus Notes (Agentic Monorepo)
+# Fullstack Template Project
 
 A template for multi-agent AI development using Next.js and AWS Serverless.
 
