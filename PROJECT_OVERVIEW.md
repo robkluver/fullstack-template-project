@@ -11,6 +11,9 @@ This is a **Next.js (Frontend) + AWS Serverless (Backend)** monorepo.
 * **Roles & Workflows:** `docs/core/AGENT_ROLES.md` (Who you are, who to hand off to)
 * **Technology Hard Limits:** `docs/core/TECH_STACK.md` (Strict version locks)
 * **Development Process:** `docs/core/PROCESS.md` (The Iteration Lifecycle)
+* **Model Selection:** `docs/core/MODEL_SELECTION.md` (When to use Opus/Sonnet/Haiku)
+* **Token Efficiency:** `docs/core/TOKEN_EFFICIENCY.md` (Minimize context and cost)
+* **Recovery Strategies:** `docs/core/RECOVERY_STRATEGIES.md` (How to handle stuck states)
 
 ### 2. Domain Specifics (Context on Demand)
 * **Frontend Agent:** Read `docs/frontend/CODING_STANDARDS_FRONTEND.md`
@@ -31,7 +34,10 @@ This is a **Next.js (Frontend) + AWS Serverless (Backend)** monorepo.
     * API Contracts → `shared/types`
     * Database Schema → `docs/backend/DATABASE_SCHEMA.md`
     * UI Design → `docs/frontend/DESIGN_SYSTEM.md`
-5. **Iteration Start:** All work MUST begin with `./scripts/start-iteration.sh "Feature Name"`. Manual folder creation is forbidden.
+5.  **Iteration Start:** All work MUST begin with `./scripts/start-iteration.sh "Feature Name"`. Manual folder creation is forbidden.
+6.  **Branch Naming:** All branches must follow `claude/YYMMDD-descriptive-name` format.
+7.  **Model Efficiency:** Use the right model for the task (see `MODEL_SELECTION.md`). Start cheap, escalate when stuck.
+8.  **Recovery Protocol:** When stuck 2+ times on same issue, stop, document, escalate model, and review failed approaches before trying again.
 
 ## 📂 Directory Structure
 ```text
