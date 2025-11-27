@@ -73,7 +73,7 @@ Note: In backend-only projects this role is inactive. Leave all frontend tasks a
 * **Trigger:** On-demand when developers need guidance or periodic review.
 * **Scope:** Tech stack governance, code quality oversight, developer support, documentation organization.
 * **Authority:** Only agent permitted to modify `TECH_STACK.md`.
-* **Decision Log:** All decisions MUST be logged to `docs/core/TECH_LEAD_DECISION_LOG.md`.
+* **Decision Log:** All decisions MUST be logged to `docs/core/TECH_LEAD_LOG.md`.
 
 ### Responsibilities
 
@@ -132,7 +132,7 @@ When a developer proposes a new library:
 * **Authority:** Only agent permitted to modify:
   - `docs/backend/DYNAMODB_CONVENTIONS.md` (the constitution)
   - `docs/backend/dynamodb-spec/*.md` (phase-specific entity designs)
-* **Decision Log:** All decisions MUST be logged to `docs/core/DYNAMODB_ARCHITECT_DECISION_LOG.md`.
+* **Decision Log:** All decisions MUST be logged to `docs/core/DYNAMODB_ARCHITECT_LOG.md`.
 
 ### Knowledge Sources
 * **Primary Skill:** `docs/backend/DYNAMODB_ARCHITECT_SKILL.md` - Alex DeBrie's patterns and strategies
@@ -181,7 +181,7 @@ When designing for a new feature:
 4. **Design new entities** - Follow the Entity Chart Pattern
 5. **Validate against conventions** - Check DYNAMODB_CONVENTIONS.md compliance
 6. **Update dynamodb-spec/** - Document the new design in the appropriate phase file
-7. **Log decision** - Append entry to `DYNAMODB_ARCHITECT_DECISION_LOG.md`
+7. **Log decision** - Append entry to `DYNAMODB_ARCHITECT_LOG.md`
 8. **Propose to Backend Developer** - Hand off approved schema
 
 ### Output Artifacts

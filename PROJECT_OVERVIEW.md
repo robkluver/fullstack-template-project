@@ -1,21 +1,36 @@
-# Nexus - Project Overview & Agent Directives
+# [Project Name] - Project Overview & Agent Directives
+
+<!--
+PLANNER AGENT: This file is your responsibility to complete when starting a new project.
+Fill in the sections below with project-specific information.
+Remove these HTML comments once you've completed the sections.
+-->
 
 ## Context
 
-**Nexus** is a productivity application featuring calendar, tasks, reminders, and notes.
+<!--
+PLANNER: Describe your project in 2-3 sentences.
+Example: "MyApp is a task management application featuring projects, tasks, and team collaboration."
+-->
 
-- **Stack:** Next.js (Frontend) + AWS Lambda (Backend)
-- **Database:** DynamoDB Single-Table Design with year-based partitioning
-- **Architecture:** Eventual consistency, Mobile-First design
+**[Project Name]** is [brief description of what the application does].
+
+- **Stack:** [e.g., Next.js (Frontend) + AWS Lambda (Backend)]
+- **Database:** [e.g., DynamoDB Single-Table Design with year-based partitioning]
+- **Architecture:** [e.g., Serverless, Mobile-First, Eventual consistency]
 - **Methodology:** Agentic Parallel Development with Gherkin-driven iterations
 
 ## Authoritative Specifications
 
+<!--
+PLANNER: Update these paths once you create the project-specific documents.
+-->
+
 | Document | Location | Purpose |
 |----------|----------|---------|
-| **Product Vision** | `docs/PRODUCT_VISION.md` | Top-level requirements, feature specs, use cases |
-| **Design Guidelines** | `docs/frontend/DESIGN_GUIDELINES.md` | UX/UI specs, interactions, visual design (use for Gherkin feature files) |
-| **DynamoDB Specification** | `docs/backend/dynamodb-spec/01-OVERVIEW.md` | Complete database design with phase-specific docs |
+| **Product Vision** | `docs/PRODUCT_VISION.md` | Top-level requirements, feature specs, use cases (create this) |
+| **Design Guidelines** | `docs/frontend/DESIGN_GUIDELINES.md` | UX/UI specs, interactions, visual design |
+| **DynamoDB Specification** | `docs/backend/dynamodb-spec/` | Database design with phase-specific docs (create for your entities) |
 | **Master Roadmap** | `TODO.md` | Current status and task tracking |
 
 ## Knowledge Map (Read ONLY what you need)
@@ -42,6 +57,7 @@
     * `WORK_LOG.md`: Where you log your actions.
 
 ## Prime Directives
+
 1.  **No Hallucinations:** Do not install libraries not listed in `TECH_STACK.md`.
 2.  **No Context Dumping:** Do not read all files. Read only the "Knowledge Map" files relevant to your current role.
 3.  **Gherkin is Law:** You cannot mark a task "Done" until the specific Gherkin scenarios in the Plan pass.
@@ -57,17 +73,22 @@
 8.  **Recovery Protocol:** When stuck 2+ times on same issue, stop, document, escalate model, and review failed approaches before trying again.
 
 ## Directory Structure
+
+<!--
+PLANNER: Update this structure to match your project once it's set up.
+-->
+
 ```text
 /
 ├── apps/
 │   ├── api/                 # AWS Lambda backend (Serverless Framework)
-│   └── web/                 # Next.js 16+ frontend (App Router)
+│   └── web/                 # Next.js frontend (App Router)
 ├── packages/
 │   ├── shared/              # Shared Types & Schemas (NPM Workspace)
 │   ├── eslint-config/       # Shared ESLint configuration
 │   └── tsconfig/            # Shared TypeScript configuration
 ├── docs/
-│   ├── PRODUCT_VISION.md    # Top-level product requirements
+│   ├── PRODUCT_VISION.md    # Top-level product requirements (create this)
 │   ├── core/                # Roles, Tech Stack, Process
 │   ├── frontend/            # Standards, Design Guidelines
 │   ├── backend/             # DynamoDB Conventions, dynamodb-spec/
@@ -78,16 +99,19 @@
 
 ## DynamoDB Specification Structure
 
-The database design is split into focused documents by implementation phase:
+<!--
+DYNAMODB ARCHITECT: Create these phase documents as you design entities for the project.
+Follow the naming convention below.
+-->
+
+The database design should be split into focused documents by implementation phase:
 
 | Document | Phase | Content |
 |----------|-------|---------|
 | `01-OVERVIEW.md` | All | Architecture overview, design decisions |
 | `02-TABLE-CONFIG-AND-INDEXES.md` | Foundation | Table schema, GSI definitions |
-| `03-PHASE1-CALENDAR.md` | 1 | EVENT, MASTER, INSTANCE, USER_META |
-| `04-PHASE2-TASKS.md` | 2 | TASK entity with Kanban support |
-| `05-PHASE3-REMINDERS.md` | 3 | REMINDER entity with snooze |
-| `06-PHASE4-NOTES.md` | 4 | NOTE entity with Markdown |
-| `07-PHASE5-CROSS-LINKING.md` | 5 | Cross-linking, Unified Agenda |
-| `08-REST-API.md` | API | All endpoint contracts |
-| `09-TESTING-AND-DEPLOYMENT.md` | Ops | Testing, deployment, monitoring |
+| `03-PHASE1-[FEATURE].md` | 1 | First feature's entities |
+| `04-PHASE2-[FEATURE].md` | 2 | Second feature's entities |
+| `...` | ... | Additional phases as needed |
+| `XX-REST-API.md` | API | All endpoint contracts |
+| `XX-TESTING-AND-DEPLOYMENT.md` | Ops | Testing, deployment, monitoring |

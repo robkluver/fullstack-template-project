@@ -1,5 +1,5 @@
 {
-  "name": "@nexus/api",
+  "name": "@repo/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,18 +13,12 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:integration": "IS_LOCAL=true jest --config jest.integration.config.js",
-    "db:start": "docker-compose up -d",
-    "db:stop": "docker-compose down",
-    "db:init": "npx ts-node scripts/init-local-db.ts",
-    "db:logs": "docker-compose logs -f",
-    "user:create": "npx ts-node scripts/create-user.ts"
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.700.0",
     "@aws-sdk/lib-dynamodb": "^3.700.0",
-    "@nexus/shared": "*",
+    "@repo/shared": "*",
     "@node-rs/argon2": "^2.0.0",
     "axios": "^1.13.2",
     "jose": "^5.9.0",
@@ -33,8 +27,8 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@nexus/eslint-config": "*",
-    "@nexus/tsconfig": "*",
+    "@repo/eslint-config": "*",
+    "@repo/tsconfig": "*",
     "@types/aws-lambda": "^8.10.145",
     "@types/node": "^22.10.0",
     "aws-sdk-client-mock": "^4.1.0",

@@ -44,7 +44,7 @@ Every unit of work must follow this strict cycle to maintain context and prevent
     * Validate against `docs/backend/DYNAMODB_CONVENTIONS.md`
 3.  **Document:**
     * Update appropriate `docs/backend/dynamodb-spec/` phase file
-    * Log decision to `docs/core/DYNAMODB_ARCHITECT_DECISION_LOG.md`
+    * Log decision to `docs/core/DYNAMODB_ARCHITECT_LOG.md`
 4.  **Handoff:**
     * Include schema design in iteration's `PLAN.md`
     * Backend Agent implements the approved schema

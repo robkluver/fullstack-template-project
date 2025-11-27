@@ -1,5 +1,5 @@
 {
-  "name": "@nexus/shared",
+  "name": "@repo/shared",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -32,8 +32,8 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@nexus/eslint-config": "*",
-    "@nexus/tsconfig": "*",
+    "@repo/eslint-config": "*",
+    "@repo/tsconfig": "*",
     "eslint": "^9.15.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.0",

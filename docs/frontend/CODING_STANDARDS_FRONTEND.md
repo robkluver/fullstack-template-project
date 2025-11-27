@@ -77,35 +77,35 @@ UI components should be **stateless** or split into:
 
 ```tsx
 // ✅ Good: Stateless presentation component
-interface EventCardProps {
-  event: CalendarEvent;
+interface ItemCardProps {
+  item: Item;
   onClick?: () => void;
 }
 
-export function EventCard({ event, onClick }: EventCardProps) {
+export function ItemCard({ item, onClick }: ItemCardProps) {
   // Pure rendering logic - no hooks that fetch data
-  return <div onClick={onClick}>{event.title}</div>;
+  return <div onClick={onClick}>{item.title}</div>;
 }
 
 // Wrapper that provides data (used in app, not in Storybook)
-export function EventCardContainer({ eventId }: { eventId: string }) {
-  const { data: event } = useEvent(eventId);
-  if (!event) return <Skeleton />;
-  return <EventCard event={event} />;
+export function ItemCardContainer({ itemId }: { itemId: string }) {
+  const { data: item } = useItem(itemId);
+  if (!item) return <Skeleton />;
+  return <ItemCard item={item} />;
 }
 ```
 
 ```tsx
 // ❌ Bad: Component that mixes data fetching with UI
-export function EventCard({ eventId }: { eventId: string }) {
-  const { data: event } = useEvent(eventId); // Can't test in Storybook
-  return <div>{event?.title}</div>;
+export function ItemCard({ itemId }: { itemId: string }) {
+  const { data: item } = useItem(itemId); // Can't test in Storybook
+  return <div>{item?.title}</div>;
 }
 ```
 
 **Pattern Application:**
-- Cards (EventCard, TaskCard, NoteCard) → Always stateless
-- Views (MonthView, WeekView) → Stateless, receive data via props
+- Cards (ItemCard, UserCard, etc.) → Always stateless
+- Views (ListView, GridView, etc.) → Stateless, receive data via props
 - Modals → Stateless presentation, container handles open/close state
 - Pages → Can be stateful (they are the top-level containers)
 
@@ -189,33 +189,33 @@ export const useUiStore = create<UiState>((set) => ({
 
 **Story Structure:**
 ```tsx
-// EventCard.stories.tsx
+// ItemCard.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { EventCard } from './EventCard';
+import { ItemCard } from './ItemCard';
 
-const meta: Meta<typeof EventCard> = {
-  title: 'Components/Calendar/EventCard',
-  component: EventCard,
+const meta: Meta<typeof ItemCard> = {
+  title: 'Components/ItemCard',
+  component: ItemCard,
   tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof EventCard>;
+type Story = StoryObj<typeof ItemCard>;
 
 // Mock data - no API calls
-const mockEvent = {
-  eventId: 'evt-1',
-  title: 'Team Standup',
-  startUtc: '2025-01-20T09:00:00Z',
+const mockItem = {
+  id: 'item-1',
+  title: 'Example Item',
+  createdAt: '2025-01-20T09:00:00Z',
   // ... other required fields
 };
 
 export const Default: Story = {
-  args: { event: mockEvent },
+  args: { item: mockItem },
 };
 
-export const Tentative: Story = {
-  args: { event: { ...mockEvent, status: 'TENTATIVE' } },
+export const Highlighted: Story = {
+  args: { item: { ...mockItem, isHighlighted: true } },
 };
 ```
 
@@ -224,10 +224,10 @@ export const Tentative: Story = {
 - `yarn storybook:build` - Build static site
 
 **Coverage Checklist:**
-- [ ] All card components (EventCard, TaskCard, NoteCard, ReminderCard, etc.)
-- [ ] All calendar views (MonthView, WeekView, DayView)
-- [ ] Navigation components (Sidebar)
-- [ ] Interactive components (CommandPalette - use mock version)
+- [ ] All card components
+- [ ] All list/grid views
+- [ ] Navigation components (Sidebar, Header)
+- [ ] Interactive components (use mock versions if needed)
 - [ ] Form components
 - [ ] Feedback components (alerts, toasts)
 

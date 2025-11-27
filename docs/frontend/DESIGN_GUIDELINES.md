@@ -1,6 +1,6 @@
-# Nexus Design Guidelines
+# Design Guidelines
 
-A comprehensive UX, UI, and interaction specification for building a high-performance personal productivity application.
+A comprehensive UX, UI, and interaction specification for building high-performance applications.
 
 ---
 
@@ -8,7 +8,7 @@ A comprehensive UX, UI, and interaction specification for building a high-perfor
 
 ### 1.1 Core Thesis: Speed as the Primary Constraint
 
-Every decision in Nexus—from rendering to color choices—serves the user's perception of speed. The application operates on strict latency imperatives:
+Every decision—from rendering to color choices—serves the user's perception of speed. The application operates on strict latency imperatives:
 
 | Threshold | User Perception | Target |
 |-----------|-----------------|--------|
@@ -18,7 +18,7 @@ Every decision in Nexus—from rendering to color choices—serves the user's pe
 
 ### 1.2 The Utilitarian Instrument
 
-Nexus is a precision instrument for serious work:
+This application is a precision instrument for serious work:
 
 - **Density over decoration**: Every pixel earns its place
 - **Speed over features**: A fast, focused tool beats a slow, comprehensive one
@@ -299,7 +299,7 @@ The keyboard is the primary input method. Every action must be achievable withou
 
 ## 5. Command Palette
 
-The command palette is the central hub of Nexus. It unifies navigation, actions, and search.
+The command palette is the central hub of the application. It unifies navigation, actions, and search.
 
 ### 5.1 Behavior
 
@@ -657,4 +657,4 @@ graph TB
 
 ---
 
-*This document defines the quality bar for Nexus. Every component, every interaction, every pixel must meet these standards. When in doubt, choose speed over features, density over decoration, and keyboard over mouse.*
+*This document defines the quality bar. Every component, every interaction, every pixel must meet these standards. When in doubt, choose speed over features, density over decoration, and keyboard over mouse.*

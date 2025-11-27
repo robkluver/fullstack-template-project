@@ -1,3 +1,3 @@
-import reactConfig from '@nexus/eslint-config/react';
+import reactConfig from '@repo/eslint-config/react';
 
 export default [...reactConfig];

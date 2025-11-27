@@ -102,22 +102,23 @@ export class CreateUser {
 
 **Reference Documents:**
 - `DYNAMODB_CONVENTIONS.md` - Design principles and naming conventions (THE LAW)
-- `dynamodb-spec/01-OVERVIEW.md` - Architecture overview and roadmap
-- `dynamodb-spec/02-TABLE-CONFIG-AND-INDEXES.md` - Table schema and GSI definitions
-- `dynamodb-spec/03-PHASE1-CALENDAR.md` - Calendar entities (EVENT, MASTER, INSTANCE)
-- `dynamodb-spec/04-PHASE2-TASKS.md` - Task entity with Kanban support
-- `dynamodb-spec/05-PHASE3-REMINDERS.md` - Reminder entity with snooze
-- `dynamodb-spec/06-PHASE4-NOTES.md` - Note entity with Markdown
-- `dynamodb-spec/07-PHASE5-CROSS-LINKING.md` - Cross-linking and Unified Agenda
-- `dynamodb-spec/08-REST-API.md` - All REST endpoint contracts
-- `dynamodb-spec/09-TESTING-AND-DEPLOYMENT.md` - Testing and deployment guide
+- `DYNAMODB_ARCHITECT_SKILL.md` - Alex DeBrie patterns from "The DynamoDB Book"
+- `dynamodb-spec/` - Project-specific entity designs (create for your project)
+
+<!--
+DYNAMODB ARCHITECT: Create the dynamodb-spec/ directory structure for your project:
+- dynamodb-spec/01-OVERVIEW.md - Architecture overview
+- dynamodb-spec/02-TABLE-CONFIG-AND-INDEXES.md - Table schema and GSI definitions
+- dynamodb-spec/XX-PHASE[N]-[FEATURE].md - Phase-specific entity designs
+- dynamodb-spec/XX-REST-API.md - All REST endpoint contracts
+-->
 
 ### Single Table Design
 
-- **Table Name:** `ProductivityData` (single table for all entities)
+- **Table Name:** `[TableName]` (single table for all entities - choose a name for your project)
 - **PK/SK Naming:** Always use generic names `PK` and `SK`
 - **Prefixing:** Always prefix values to prevent collisions (e.g., `USER#userId`)
-- **GSIs:** Use `GSI1PK`, `GSI1SK` for calendar queries; `GSI2PK`, `GSI2SK` for recurrence (sparse)
+- **GSIs:** Use `GSI1PK`, `GSI1SK`, etc. for secondary access patterns (design per DYNAMODB_CONVENTIONS.md)
 
 ### Key Design Principles (from DYNAMODB_CONVENTIONS.md)
 

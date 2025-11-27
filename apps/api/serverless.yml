@@ -1,4 +1,8 @@
-service: nexus-api
+# Template serverless.yml - Customize for your project
+# See docs/backend/CODING_STANDARDS_BACKEND.md for patterns
+# See docs/backend/DYNAMODB_CONVENTIONS.md for database design
+
+service: template-api
 
 provider:
   name: aws
@@ -9,11 +13,8 @@ provider:
     STAGE: ${self:provider.stage}
     TABLE_NAME: ${self:custom.tableName}
     JWT_SECRET: ${env:JWT_SECRET, 'dev-secret-change-in-production-min-32-chars'}
-    JWT_ISSUER: nexus-api
-    JWT_AUDIENCE: nexus-app
-    GOOGLE_CLIENT_ID: ${env:GOOGLE_CLIENT_ID, ''}
-    GOOGLE_CLIENT_SECRET: ${env:GOOGLE_CLIENT_SECRET, ''}
-    GOOGLE_REDIRECT_URI: ${env:GOOGLE_REDIRECT_URI, 'http://localhost:3000/oauth/google/callback'}
+    JWT_ISSUER: ${self:service}
+    JWT_AUDIENCE: ${self:service}
   iam:
     role:
       statements:
@@ -27,8 +28,8 @@ provider:
             - dynamodb:BatchGetItem
             - dynamodb:BatchWriteItem
           Resource:
-            - !GetAtt ProductivityDataTable.Arn
-            - !Sub "${ProductivityDataTable.Arn}/index/*"
+            - !GetAtt AppDataTable.Arn
+            - !Sub "${AppDataTable.Arn}/index/*"
 
 functions:
   health:
@@ -39,341 +40,29 @@ functions:
           method: get
           cors: true
 
-  login:
-    handler: dist/handlers/auth/login.handler
-    events:
-      - http:
-          path: /auth/login
-          method: post
-          cors: true
-
-  # OAuth 2.0 endpoints
-  oauthToken:
-    handler: dist/handlers/oauth/token.handler
-    events:
-      - http:
-          path: /oauth/token
-          method: post
-          cors: true
-
-  oauthRevoke:
-    handler: dist/handlers/oauth/revoke.handler
-    events:
-      - http:
-          path: /oauth/revoke
-          method: post
-          cors: true
-
-  oauthUserinfo:
-    handler: dist/handlers/oauth/userinfo.handler
-    events:
-      - http:
-          path: /oauth/userinfo
-          method: get
-          cors: true
-
-  # Calendar API endpoints
-  getAgenda:
-    handler: dist/handlers/calendar/getAgenda.handler
-    events:
-      - http:
-          path: /users/{userId}/agenda
-          method: get
-          cors: true
-
-  getEvent:
-    handler: dist/handlers/calendar/getEvent.handler
-    events:
-      - http:
-          path: /users/{userId}/events/{eventId}
-          method: get
-          cors: true
-
-  createEvent:
-    handler: dist/handlers/calendar/createEvent.handler
-    events:
-      - http:
-          path: /users/{userId}/events
-          method: post
-          cors: true
-
-  updateEvent:
-    handler: dist/handlers/calendar/updateEvent.handler
-    events:
-      - http:
-          path: /users/{userId}/events/{eventId}
-          method: patch
-          cors: true
-
-  deleteEvent:
-    handler: dist/handlers/calendar/deleteEvent.handler
-    events:
-      - http:
-          path: /users/{userId}/events/{eventId}
-          method: delete
-          cors: true
-
-  # Recurring event endpoints
-  createRecurring:
-    handler: dist/handlers/calendar/createRecurring.handler
-    events:
-      - http:
-          path: /users/{userId}/recurring
-          method: post
-          cors: true
-
-  getSeries:
-    handler: dist/handlers/calendar/getSeries.handler
-    events:
-      - http:
-          path: /users/{userId}/events/{masterId}/series
-          method: get
-          cors: true
-
-  endSeries:
-    handler: dist/handlers/calendar/endSeries.handler
-    events:
-      - http:
-          path: /users/{userId}/events/{masterId}/future
-          method: delete
-          cors: true
-
-  # User metadata endpoints
-  getUserMeta:
-    handler: dist/handlers/user/getUserMeta.handler
-    events:
-      - http:
-          path: /users/{userId}/meta
-          method: get
-          cors: true
-
-  updateUserMeta:
-    handler: dist/handlers/user/updateUserMeta.handler
-    events:
-      - http:
-          path: /users/{userId}/meta
-          method: patch
-          cors: true
-
-  # Task API endpoints (Phase 3)
-  getTasks:
-    handler: dist/handlers/tasks/getTasks.handler
-    events:
-      - http:
-          path: /users/{userId}/tasks
-          method: get
-          cors: true
-
-  getTask:
-    handler: dist/handlers/tasks/getTask.handler
-    events:
-      - http:
-          path: /users/{userId}/tasks/{taskId}
-          method: get
-          cors: true
-
-  createTask:
-    handler: dist/handlers/tasks/createTask.handler
-    events:
-      - http:
-          path: /users/{userId}/tasks
-          method: post
-          cors: true
-
-  updateTask:
-    handler: dist/handlers/tasks/updateTask.handler
-    events:
-      - http:
-          path: /users/{userId}/tasks/{taskId}
-          method: patch
-          cors: true
-
-  deleteTask:
-    handler: dist/handlers/tasks/deleteTask.handler
-    events:
-      - http:
-          path: /users/{userId}/tasks/{taskId}
-          method: delete
-          cors: true
-
-  # Reminder API endpoints (Phase 4)
-  getReminders:
-    handler: dist/handlers/reminders/getReminders.handler
-    events:
-      - http:
-          path: /users/{userId}/reminders
-          method: get
-          cors: true
-
-  getReminder:
-    handler: dist/handlers/reminders/getReminder.handler
-    events:
-      - http:
-          path: /users/{userId}/reminders/{reminderId}
-          method: get
-          cors: true
-
-  createReminder:
-    handler: dist/handlers/reminders/createReminder.handler
-    events:
-      - http:
-          path: /users/{userId}/reminders
-          method: post
-          cors: true
-
-  updateReminder:
-    handler: dist/handlers/reminders/updateReminder.handler
-    events:
-      - http:
-          path: /users/{userId}/reminders/{reminderId}
-          method: patch
-          cors: true
-
-  deleteReminder:
-    handler: dist/handlers/reminders/deleteReminder.handler
-    events:
-      - http:
-          path: /users/{userId}/reminders/{reminderId}
-          method: delete
-          cors: true
-
-  # Note API endpoints (Phase 5)
-  getNotes:
-    handler: dist/handlers/notes/getNotes.handler
-    events:
-      - http:
-          path: /users/{userId}/notes
-          method: get
-          cors: true
-
-  getNote:
-    handler: dist/handlers/notes/getNote.handler
-    events:
-      - http:
-          path: /users/{userId}/notes/{noteId}
-          method: get
-          cors: true
-
-  createNote:
-    handler: dist/handlers/notes/createNote.handler
-    events:
-      - http:
-          path: /users/{userId}/notes
-          method: post
-          cors: true
-
-  updateNote:
-    handler: dist/handlers/notes/updateNote.handler
-    events:
-      - http:
-          path: /users/{userId}/notes/{noteId}
-          method: patch
-          cors: true
-
-  deleteNote:
-    handler: dist/handlers/notes/deleteNote.handler
-    events:
-      - http:
-          path: /users/{userId}/notes/{noteId}
-          method: delete
-          cors: true
-
-  # Unified Agenda endpoint (Phase 6)
-  getUnifiedAgenda:
-    handler: dist/handlers/unified/getUnifiedAgenda.handler
-    events:
-      - http:
-          path: /users/{userId}/unified-agenda
-          method: get
-          cors: true
-
-  # Google OAuth endpoints (Phase 9)
-  googleOAuthAuthorize:
-    handler: dist/handlers/google-oauth/authorize.handler
-    events:
-      - http:
-          path: /oauth/google/authorize
-          method: get
-          cors: true
-
-  googleOAuthCallback:
-    handler: dist/handlers/google-oauth/callback.handler
-    events:
-      - http:
-          path: /oauth/google/callback
-          method: post
-          cors: true
-
-  googleOAuthRevoke:
-    handler: dist/handlers/google-oauth/revoke.handler
-    events:
-      - http:
-          path: /users/{userId}/google-calendar/revoke
-          method: delete
-          cors: true
-
-  googleCalendarStatus:
-    handler: dist/handlers/google-oauth/status.handler
-    events:
-      - http:
-          path: /users/{userId}/google-calendar/status
-          method: get
-          cors: true
-
-  googleCalendarImport:
-    handler: dist/handlers/google-oauth/import.handler
-    timeout: 30
-    events:
-      - http:
-          path: /users/{userId}/google-calendar/import
-          method: post
-          cors: true
-
-  # Notification API endpoints (Phase 9)
-  getNotifications:
-    handler: dist/handlers/notifications/getNotifications.handler
-    events:
-      - http:
-          path: /users/{userId}/notifications
-          method: get
-          cors: true
-
-  getNotification:
-    handler: dist/handlers/notifications/getNotification.handler
-    events:
-      - http:
-          path: /users/{userId}/notifications/{notificationId}
-          method: get
-          cors: true
-
-  updateNotification:
-    handler: dist/handlers/notifications/updateNotification.handler
-    events:
-      - http:
-          path: /users/{userId}/notifications/{notificationId}
-          method: patch
-          cors: true
-
-  deleteNotification:
-    handler: dist/handlers/notifications/deleteNotification.handler
-    events:
-      - http:
-          path: /users/{userId}/notifications/{notificationId}
-          method: delete
-          cors: true
+  # Add your API endpoints here
+  # Example:
+  # getItems:
+  #   handler: dist/handlers/items/getItems.handler
+  #   events:
+  #     - http:
+  #         path: /users/{userId}/items
+  #         method: get
+  #         cors: true
 
 plugins:
   - serverless-offline
 
 custom:
-  tableName: ProductivityData-${self:provider.stage}
+  tableName: AppData-${self:provider.stage}
   serverless-offline:
     httpPort: 3001
 
 resources:
   Resources:
-    # ProductivityData Single-Table (see docs/backend/dynamodb-spec/02-TABLE-CONFIG-AND-INDEXES.md)
-    ProductivityDataTable:
+    # Single-Table DynamoDB (see docs/backend/DYNAMODB_CONVENTIONS.md)
+    # Customize table name and GSIs based on your access patterns
+    AppDataTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.tableName}
@@ -387,26 +76,14 @@ resources:
             AttributeType: S
           - AttributeName: GSI1SK
             AttributeType: S
-          - AttributeName: GSI2PK
-            AttributeType: S
-          - AttributeName: GSI2SK
-            AttributeType: S
-          - AttributeName: GSI3PK
-            AttributeType: S
-          - AttributeName: GSI3SK
-            AttributeType: S
-          - AttributeName: GSI4PK
-            AttributeType: S
-          - AttributeName: GSI4SK
-            AttributeType: S
         KeySchema:
           - AttributeName: PK
             KeyType: HASH
           - AttributeName: SK
             KeyType: RANGE
         GlobalSecondaryIndexes:
-          # GSI1: YearView - Calendar/agenda queries (year-based partitioning)
-          - IndexName: GSI1-YearView
+          # GSI1: Time-based queries (year-based partitioning)
+          - IndexName: GSI1-TimeView
             KeySchema:
               - AttributeName: GSI1PK
                 KeyType: HASH
@@ -414,33 +91,6 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
-          # GSI2: RecurrenceLookup - Sparse index for recurring events
-          - IndexName: GSI2-RecurrenceLookup
-            KeySchema:
-              - AttributeName: GSI2PK
-                KeyType: HASH
-              - AttributeName: GSI2SK
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          # GSI3: TaskStatus - Sparse index for Kanban views (Phase 2)
-          - IndexName: GSI3-TaskStatus
-            KeySchema:
-              - AttributeName: GSI3PK
-                KeyType: HASH
-              - AttributeName: GSI3SK
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          # GSI4: CrossLinks - Sparse index for reverse link lookups (Phase 5)
-          - IndexName: GSI4-CrossLinks
-            KeySchema:
-              - AttributeName: GSI4PK
-                KeyType: HASH
-              - AttributeName: GSI4SK
-                KeyType: RANGE
-            Projection:
-              ProjectionType: KEYS_ONLY
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
         TimeToLiveSpecification:
@@ -450,16 +100,16 @@ resources:
           PointInTimeRecoveryEnabled: true
         Tags:
           - Key: Application
-            Value: Nexus
+            Value: ${self:service}
           - Key: Environment
             Value: ${self:provider.stage}
 
   Outputs:
-    ProductivityDataTableName:
-      Value: !Ref ProductivityDataTable
+    AppDataTableName:
+      Value: !Ref AppDataTable
       Export:
         Name: ${self:service}-${self:provider.stage}-TableName
-    ProductivityDataTableArn:
-      Value: !GetAtt ProductivityDataTable.Arn
+    AppDataTableArn:
+      Value: !GetAtt AppDataTable.Arn
       Export:
         Name: ${self:service}-${self:provider.stage}-TableArn

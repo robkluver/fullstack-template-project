@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@nexus/shared'],
+  transpilePackages: ['@repo/shared'],
   turbopack: {
     root: path.join(__dirname, '../..'),
   },
