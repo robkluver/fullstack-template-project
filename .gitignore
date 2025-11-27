@@ -1,0 +1,27 @@
+# Generated projects (created by scripts/create-project.js)
+# These are test outputs and should not be committed
+momentum-productivity/
+my-*/
+*-app/
+*-web/
+*-api/
+
+# Build outputs
+dist/
+build/
+.next/
+.turbo/
+storybook-static/
+
+# Node modules
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
