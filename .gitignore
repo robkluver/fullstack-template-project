@@ -6,6 +6,13 @@ my-*/
 *-web/
 *-api/
 
+# Build outputs
+dist/
+build/
+.next/
+.turbo/
+storybook-static/
+
 # Node modules
 node_modules/
 

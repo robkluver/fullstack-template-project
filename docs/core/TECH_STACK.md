@@ -26,6 +26,7 @@ This template supports three configurations:
 | **Tailwind CSS** | 4.x | Utility-first styling |
 | **Zustand** | 5.x | Client state management |
 | **TanStack Query** | 5.x | Server state / data fetching |
+| **Axios** | 1.x | HTTP client for API requests |
 | **Zod** | 3.x | Runtime validation |
 
 ### Frontend Testing
@@ -142,12 +143,57 @@ Node.js 20.x/22.x
 
 ---
 
+## Adding New Libraries (Exception Process)
+
+**Default Rule:** Do NOT add libraries not listed in this document without explicit user permission.
+
+If a new library is absolutely necessary (blocking issue, no reasonable alternative), follow this process:
+
+### Step 1: Verify Latest Version
+- Search npmjs.com for the package
+- Note the latest stable version
+- Check weekly downloads and last publish date (avoid abandoned packages)
+
+### Step 2: Check Compatibility
+- Read the release notes/changelog for the latest version
+- Check for known incompatibilities with our stack:
+  - React 19.x
+  - Next.js 16.x
+  - Node.js 20.x/22.x
+  - TypeScript 5.9.x
+- Check the package's peer dependencies
+
+### Step 3: Select Version (Stability Rule)
+- **Avoid x.0.z versions** when possible (e.g., avoid 3.0.0, 3.0.1)
+- Prefer the latest **(x-1).y.z** stable version (e.g., if latest is 3.1.0, consider 2.x.y if stable)
+- Exception: Use x.0.z only if:
+  - It's been stable for 3+ months
+  - No critical issues reported
+  - Required for compatibility with other stack components
+
+### Step 4: Document
+- Add the library to this file with version and rationale
+- Update `package.json` with exact version (not ^)
+- Note any configuration changes required
+
+**Example Evaluation:**
+```
+Library: some-package
+Latest: 4.0.2 (published 2 weeks ago)
+Decision: Use 3.8.1 (latest 3.x, stable for 6 months)
+Reason: 4.0.0 has breaking changes, wait for ecosystem to stabilize
+```
+
+---
+
 ## Explicitly NOT Approved
 
-Do not use without discussion:
+Do not use without Tech Lead approval:
 - **Express.js** - Use Lambda handlers directly
 - **Prisma** - Use DynamoDB with direct SDK
 - **Redux** - Use Zustand instead
-- **Axios** - Use native fetch
 - **Moment.js** - Use date-fns or native Intl
 - **Lodash** - Use native methods or es-toolkit
+- **styled-jsx** - Use Tailwind CSS utilities
+- **CSS Modules** - Use Tailwind CSS utilities
+- **styled-components/emotion** - Use Tailwind CSS utilities

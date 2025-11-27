@@ -1,0 +1,115 @@
+# Template serverless.yml - Customize for your project
+# See docs/backend/CODING_STANDARDS_BACKEND.md for patterns
+# See docs/backend/DYNAMODB_CONVENTIONS.md for database design
+
+service: template-api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    STAGE: ${self:provider.stage}
+    TABLE_NAME: ${self:custom.tableName}
+    JWT_SECRET: ${env:JWT_SECRET, 'dev-secret-change-in-production-min-32-chars'}
+    JWT_ISSUER: ${self:service}
+    JWT_AUDIENCE: ${self:service}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - !GetAtt AppDataTable.Arn
+            - !Sub "${AppDataTable.Arn}/index/*"
+
+functions:
+  health:
+    handler: dist/handlers/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+
+  # Add your API endpoints here
+  # Example:
+  # getItems:
+  #   handler: dist/handlers/items/getItems.handler
+  #   events:
+  #     - http:
+  #         path: /users/{userId}/items
+  #         method: get
+  #         cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  tableName: AppData-${self:provider.stage}
+  serverless-offline:
+    httpPort: 3001
+
+resources:
+  Resources:
+    # Single-Table DynamoDB (see docs/backend/DYNAMODB_CONVENTIONS.md)
+    # Customize table name and GSIs based on your access patterns
+    AppDataTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: PK
+            AttributeType: S
+          - AttributeName: SK
+            AttributeType: S
+          - AttributeName: GSI1PK
+            AttributeType: S
+          - AttributeName: GSI1SK
+            AttributeType: S
+        KeySchema:
+          - AttributeName: PK
+            KeyType: HASH
+          - AttributeName: SK
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          # GSI1: Time-based queries (year-based partitioning)
+          - IndexName: GSI1-TimeView
+            KeySchema:
+              - AttributeName: GSI1PK
+                KeyType: HASH
+              - AttributeName: GSI1SK
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+        Tags:
+          - Key: Application
+            Value: ${self:service}
+          - Key: Environment
+            Value: ${self:provider.stage}
+
+  Outputs:
+    AppDataTableName:
+      Value: !Ref AppDataTable
+      Export:
+        Name: ${self:service}-${self:provider.stage}-TableName
+    AppDataTableArn:
+      Value: !GetAtt AppDataTable.Arn
+      Export:
+        Name: ${self:service}-${self:provider.stage}-TableArn

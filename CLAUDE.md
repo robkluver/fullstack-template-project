@@ -10,6 +10,8 @@ Activate agent roles using these commands (defined in `.claude/commands/`):
 * `/act-backend` - Activates Backend Developer role (uses Sonnet)
 * `/act-frontend` - Activates Frontend Developer role (uses Sonnet)
 * `/act-qa` - Activates QA/Coordinator role (uses Haiku/Sonnet)
+* `/act-techlead` - Activates Tech Lead role for library decisions and code review (uses Opus)
+* `/act-dynamodb-architect` - Activates DynamoDB Architect role for database schema design (uses Opus)
 
 ## Key Documentation
 

@@ -37,6 +37,16 @@
 | Analyzing test failures | **Sonnet** | Pattern recognition |
 | Writing RETRO.md | **Sonnet** | Synthesis and reflection |
 
+### Tech Lead Phase (Tech Lead Agent)
+| Task | Model | Rationale |
+|------|-------|-----------|
+| Library approval decisions | **Opus** | Deepest reasoning + web search for currency |
+| Periodic code review | **Opus** | Comprehensive analysis across frontend/backend |
+| Documentation organization | **Opus** | Holistic view of doc structure |
+| Architecture decisions | **Opus** | Complex tradeoff analysis |
+
+**Note:** Tech Lead always uses Opus for its superior reasoning on architectural decisions. Use web search to verify library versions, security advisories, and current best practices (training data may be months old).
+
 ---
 
 ## Model Escalation Protocol

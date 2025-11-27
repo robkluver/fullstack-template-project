@@ -1,0 +1,28 @@
+# Docker Compose for local development
+# Provides DynamoDB Local for testing without AWS costs
+#
+# Usage:
+#   docker-compose up -d        # Start DynamoDB Local
+#   docker-compose down         # Stop DynamoDB Local
+#   docker-compose logs -f      # View logs
+
+version: '3.8'
+
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: template-dynamodb-local
+    ports:
+      - '8000:8000'
+    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath /data'
+    volumes:
+      - dynamodb-data:/data
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:8000/ || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  dynamodb-data:
+    driver: local

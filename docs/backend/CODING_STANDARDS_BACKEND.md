@@ -100,16 +100,38 @@ export class CreateUser {
 
 ## 4. DynamoDB Standards
 
+**Reference Documents:**
+- `DYNAMODB_CONVENTIONS.md` - Design principles and naming conventions (THE LAW)
+- `DYNAMODB_ARCHITECT_SKILL.md` - Alex DeBrie patterns from "The DynamoDB Book"
+- `dynamodb-spec/` - Project-specific entity designs (create for your project)
+
+<!--
+DYNAMODB ARCHITECT: Create the dynamodb-spec/ directory structure for your project:
+- dynamodb-spec/01-OVERVIEW.md - Architecture overview
+- dynamodb-spec/02-TABLE-CONFIG-AND-INDEXES.md - Table schema and GSI definitions
+- dynamodb-spec/XX-PHASE[N]-[FEATURE].md - Phase-specific entity designs
+- dynamodb-spec/XX-REST-API.md - All REST endpoint contracts
+-->
+
 ### Single Table Design
 
-  * **PK/SK Naming:** Always use generic names `PK` and `SK`.
-  * **Prefixing:** Always prefix values to prevent collisions (e.g., `USER#123`).
-  * **GSIs:** Use generic names `GSI1PK`, `GSI1SK`.
+- **Table Name:** `[TableName]` (single table for all entities - choose a name for your project)
+- **PK/SK Naming:** Always use generic names `PK` and `SK`
+- **Prefixing:** Always prefix values to prevent collisions (e.g., `USER#userId`)
+- **GSIs:** Use `GSI1PK`, `GSI1SK`, etc. for secondary access patterns (design per DYNAMODB_CONVENTIONS.md)
+
+### Key Design Principles (from DYNAMODB_CONVENTIONS.md)
+
+- **Year-Based Partitioning:** `GSI1PK = USER#<userId>#<YYYY>` (91% fewer multi-queries)
+- **Sparse GSI2:** Only populate for recurring events (saves 80% on writes)
+- **Optimistic Locking:** ALL updates MUST use `version` attribute checks
+- **ISO 8601 UTC:** All timestamps must be ISO 8601 format with Z suffix
 
 ### Operations
 
-  * **No Scans:** `Scan` operations are strictly forbidden in production code. Use `Query`.
-  * **Batching:** Use `BatchGetItem` or `BatchWriteItem` when processing \> 1 record.
+- **No Scans:** `Scan` operations are strictly forbidden in production code. Use `Query`
+- **Batching:** Use `BatchGetItem` or `BatchWriteItem` when processing > 1 record
+- **Pagination:** Required for queries that may return > 100 items
 
 -----
 

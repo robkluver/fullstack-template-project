@@ -67,6 +67,48 @@ export function Button({ variant = 'primary', isLoading, ...props }: ButtonProps
       * Event listeners (`onClick`, `onChange`).
       * Browser-only APIs (`window`, `localStorage`).
 
+### Stateless UI Components (Storybook-First Pattern)
+
+UI components should be **stateless** or split into:
+1. **Stateless Presentation Component** - Receives all data via props, renders UI
+2. **Stateful Container/Wrapper** - Handles data fetching, state management, passes data to presentation component
+
+**Why:** Stateless components are testable in Storybook with mock data, making visual testing and documentation easy.
+
+```tsx
+// ✅ Good: Stateless presentation component
+interface ItemCardProps {
+  item: Item;
+  onClick?: () => void;
+}
+
+export function ItemCard({ item, onClick }: ItemCardProps) {
+  // Pure rendering logic - no hooks that fetch data
+  return <div onClick={onClick}>{item.title}</div>;
+}
+
+// Wrapper that provides data (used in app, not in Storybook)
+export function ItemCardContainer({ itemId }: { itemId: string }) {
+  const { data: item } = useItem(itemId);
+  if (!item) return <Skeleton />;
+  return <ItemCard item={item} />;
+}
+```
+
+```tsx
+// ❌ Bad: Component that mixes data fetching with UI
+export function ItemCard({ itemId }: { itemId: string }) {
+  const { data: item } = useItem(itemId); // Can't test in Storybook
+  return <div>{item?.title}</div>;
+}
+```
+
+**Pattern Application:**
+- Cards (ItemCard, UserCard, etc.) → Always stateless
+- Views (ListView, GridView, etc.) → Stateless, receive data via props
+- Modals → Stateless presentation, container handles open/close state
+- Pages → Can be stateful (they are the top-level containers)
+
 -----
 
 ## 3. State Management
@@ -131,10 +173,63 @@ export const useUiStore = create<UiState>((set) => ({
   * **Selectors:** Use `screen.getByRole` (accessibility first) or `data-testid` if necessary.
   * **Mocking:** Mock strictly at the boundaries (API calls, heavy sub-components).
 
-### Storybook
+### Storybook (Component Documentation)
 
-  * **Mandatory:** Every UI component must have a `.stories.tsx` file.
-  * **Variants:** Create stories for `Default`, `Loading`, `Error`, and `Empty` states.
+**Mandatory:** Every **stateless UI component** must have a `.stories.tsx` file with mock data.
+
+**Requirements:**
+1. **Mock Data:** All stories must use mock data - no API calls or external dependencies.
+2. **Variants:** Create stories for all meaningful states:
+   - `Default` - Standard appearance
+   - `Empty` - No data state
+   - `Loading` - Loading indicator (if applicable)
+   - `Error` - Error state (if applicable)
+   - All visual variants (colors, sizes, etc.)
+3. **Interactive Props:** Use Storybook controls for interactive testing.
+
+**Story Structure:**
+```tsx
+// ItemCard.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { ItemCard } from './ItemCard';
+
+const meta: Meta<typeof ItemCard> = {
+  title: 'Components/ItemCard',
+  component: ItemCard,
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof ItemCard>;
+
+// Mock data - no API calls
+const mockItem = {
+  id: 'item-1',
+  title: 'Example Item',
+  createdAt: '2025-01-20T09:00:00Z',
+  // ... other required fields
+};
+
+export const Default: Story = {
+  args: { item: mockItem },
+};
+
+export const Highlighted: Story = {
+  args: { item: { ...mockItem, isHighlighted: true } },
+};
+```
+
+**Commands:**
+- `yarn storybook` - Start dev server (port 6006)
+- `yarn storybook:build` - Build static site
+
+**Coverage Checklist:**
+- [ ] All card components
+- [ ] All list/grid views
+- [ ] Navigation components (Sidebar, Header)
+- [ ] Interactive components (use mock versions if needed)
+- [ ] Form components
+- [ ] Feedback components (alerts, toasts)
 
 -----
 

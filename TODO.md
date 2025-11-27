@@ -1,31 +1,70 @@
 # Project Roadmap & Status
 
-**Current Iteration:** [Link to Active Plan Doc in /docs/iterations/]
-**Last Updated:** [Date]
+**Last Updated:** [DATE]
 
-## 🚦 Feature Status Dashboard
+> **Authoritative Sources:**
+> - Product Vision & Requirements: `docs/PRODUCT_VISION.md` (create for your project)
+> - Tech Stack: `docs/core/TECH_STACK.md`
+
+---
+
+## How to Use This Document
+
+This is the master tracking document for project progress. The QA Agent updates this document when marking tasks complete.
+
+### Status Legend
+- **Backlog** - Not yet started
+- **Pending** - Planned for current iteration
+- **In Progress** - Currently being worked on
+- **Done** - Completed and verified by QA
+
+### Feature Status Template
+
+<!--
+QA AGENT: Copy this template row for each new feature/epic.
+-->
 
 | Feature / Epic | Planner | Frontend | Backend | QA/Verify | Status |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **1. User Auth** | ✅ | 🔄 | ⏳ | 🔴 | *In Progress* |
-| **2. User Profile** | 🔴 | 🔴 | 🔴 | 🔴 | *Backlog* |
-
-*(Legend: 🔴 Backlog, ⏳ Ready, 🔄 In Progress, ✅ Done)*
+| **Feature Name** | Pending | Pending | Pending | Pending | *Backlog* |
 
 ---
 
-## 🚀 Active Work Queue
+## Feature Status Dashboard
 
-### 🔄 Backend Agent
-* [ ] Implement Lambda handler for `POST /auth/login`
-* [ ] Update `shared/types/auth.ts` with response schema
+<!--
+QA AGENT: Add feature rows here as the project progresses.
+-->
 
-### 🔄 Frontend Agent
-* [ ] Create `LoginForm` component
-* [ ] Connect `useAuth` store to API
+| Feature / Epic | Planner | Frontend | Backend | QA/Verify | Status |
+| :--- | :---: | :---: | :---: | :---: | :--- |
 
 ---
 
-## 📦 Backlog
-* [ ] Feature: Password Reset
-* [ ] Feature: Email Notifications
+## Current Tasks
+
+<!--
+PLANNER AGENT: Add current iteration tasks here.
+QA AGENT: Update status as work progresses.
+-->
+
+---
+
+## Backlog
+
+<!--
+PLANNER AGENT: Add future work items here as they are identified.
+-->
+
+---
+
+## Reference Documentation
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| **Product Vision** | `docs/PRODUCT_VISION.md` | Top-level requirements and feature specs |
+| **Design Guidelines** | `docs/frontend/DESIGN_GUIDELINES.md` | UX, UI, interaction specifications |
+| **DynamoDB Conventions** | `docs/backend/DYNAMODB_CONVENTIONS.md` | Database design principles (THE LAW) |
+| **Tech Stack** | `docs/core/TECH_STACK.md` | Approved libraries and versions |
+| **Agent Roles** | `docs/core/AGENT_ROLES.md` | Role definitions and handoffs |
+| **Process** | `docs/core/PROCESS.md` | Iteration lifecycle |
